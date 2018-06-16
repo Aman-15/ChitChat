@@ -1,64 +1,37 @@
 package main
 
 import (
-	"fmt"
-	"html/template"
 	"net/http"
+	"time"
 )
 
-func generateHTML(w http.ResponseWriter, data interface{}, fn ...string) {
-	var files []string
-
-	for _, file := range fn {
-		files = append(files, fmt.Sprintf("templates/%s.html", file))
-	}
-
-	templates := template.Must(template.ParseFiles(files...))
-	templates.ExecuteTemplate(writer, "layout", data)
-}
-
-func index(w http.ResponseWriter, r *http.Request) {
-	files := []string{"templates/layout.html",
-		"templates/navbar.html",
-		"templates/index.html"}
-
-	templates := template.Must(template.ParseFiles(files...))
-
-	threads, err := data.Threads()
-	if err == nil {
-		_, err := session(w, r)
-
-		if err != nil {
-			generateHTML(w, threads, "layout", "public.navbar", "index")
-		} else {
-			generateHTML(w, threads, "layout", "private.navbar", "index")
-		}
-
-	}
-}
-
 func main() {
+	p("ChitChat", version(), "started at", config.Address)
 
 	mux := http.NewServeMux()
-
-	files := http.FileServer(http.Dir("/public"))
+	files := http.FileServer(http.Dir(config.Static))
 	mux.Handle("/static/", http.StripPrefix("/static/", files))
 
 	mux.HandleFunc("/", index)
 	mux.HandleFunc("/err", err)
+
 	mux.HandleFunc("/login", login)
 	mux.HandleFunc("/logout", logout)
 	mux.HandleFunc("/signup", signup)
 	mux.HandleFunc("/signup_account", signupAccount)
 	mux.HandleFunc("/authenticate", authenticate)
+
 	mux.HandleFunc("/thread/new", newThread)
 	mux.HandleFunc("/thread/create", createThread)
 	mux.HandleFunc("/thread/post", postThread)
 	mux.HandleFunc("/thread/read", readThread)
 
 	server := &http.Server{
-		Addr:    "0.0.0.0:8080",
-		Handler: mux,
+		Addr:           config.Address,
+		Handler:        mux,
+		ReadTimeout:    time.Duration(config.ReadTimeout * int64(time.Second)),
+		WriteTimeout:   time.Duration(config.WriteTimeout * int64(time.Second)),
+		MaxHeaderBytes: 1 << 20,
 	}
 	server.ListenAndServe()
 }
