@@ -1,9 +1,8 @@
 package main
 
 import (
+	"github.com/Aman-15/ChitChat/data"
 	"net/http"
-
-	"./data"
 )
 
 // GET /login

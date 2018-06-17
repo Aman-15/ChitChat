@@ -12,10 +12,14 @@ import (
 
 var Db *sql.DB
 
+const (
+	dbName = "chitTun"
+)
+
 func init() {
 	var err error
-	Db, err = sql.Open("postgres", "dbname=ChitChat sslmode=disable")
-
+	Db, err = sql.Open("postgres", fmt.Sprintf("dbname=%s sslmode=disable", dbName))
+	fmt.Println(dbName)
 	if err != nil {
 		log.Fatal(err)
 	}
