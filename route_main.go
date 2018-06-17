@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"./data"
+	"github.com/Aman-15/ChitChat/data"
 )
 
 // GET /err?msg=

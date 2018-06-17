@@ -4,13 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/Aman-15/ChitChat/data"
 	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"strings"
-
-	"./data"
 )
 
 type Configuration struct {
