@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/Aman-15/ChitChat/data"
 	"net/http"
-
-	"./data"
 )
 
 func newThread(writer http.ResponseWriter, request *http.Request) {
